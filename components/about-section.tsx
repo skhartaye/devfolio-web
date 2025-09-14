@@ -65,7 +65,7 @@ export function AboutSection() {
             <div className="space-y-6">
               <div className="text-lg text-muted-foreground space-y-4 text-pretty">
                 <p>
-                  I'm a passionate developer specializing in Python, Move, C++, and PHP. I create robust applications 
+                  I'm a passionate developer specializing in Python, Move, C++, and PHP. I create sustainable applications 
                   with PostgreSQL databases and containerized deployments using Docker. I love solving complex problems 
                   with clean, efficient code.
                 </p>
@@ -75,7 +75,7 @@ export function AboutSection() {
                   and IoT space.
                 </p>
                 <p>
-                  I believe in writing maintainable, well-documented code and creating applications that are both 
+                  I believe in writing maintainable, well-documented code and creating applications that are both sustainable and user-friendly. My goal is to build solutions that make a real impact.
                   performant and user-friendly. My goal is to build solutions that make a real impact.
                 </p>
               </div>
