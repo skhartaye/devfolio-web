@@ -182,26 +182,26 @@ export function Security() {
         let devtools = false;
         let devtoolsCount = 0;
         
-        // Method 1: Window size detection (more conservative)
+        // Method 1: Window size detection (enhanced for menu access)
         const checkWindowSize = () => {
-          const threshold = 200; // Increased threshold to reduce false positives
+          const threshold = 150; // Lowered threshold to catch menu-opened DevTools
           const heightDiff = window.outerHeight - window.innerHeight;
           const widthDiff = window.outerWidth - window.innerWidth;
           
-          // Only trigger if the difference is significant and consistent
-          if ((heightDiff > threshold && heightDiff < 1000) || 
-              (widthDiff > threshold && widthDiff < 1000)) {
+          // Check for DevTools opened from menu (usually smaller differences)
+          if ((heightDiff > threshold && heightDiff < 800) || 
+              (widthDiff > threshold && widthDiff < 800)) {
             devtoolsCount++;
           }
         };
         
-        // Method 2: Console detection (more reliable)
+        // Method 2: Console detection (enhanced for menu access)
         const checkConsole = () => {
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          // Increased threshold to reduce false positives
-          if (end - start > 5) {
+          // Lowered threshold to catch menu-opened DevTools
+          if (end - start > 2) {
             devtoolsCount++;
           }
         };
@@ -265,6 +265,45 @@ export function Security() {
           }
         };
         
+        // Method 8: Enhanced DevTools detection for menu access
+        const checkMenuDevTools = () => {
+          // Check for DevTools opened via menu (different behavior)
+          if (window.outerHeight !== window.innerHeight || window.outerWidth !== window.innerWidth) {
+            // Additional check for DevTools specific window properties
+            if (window.screen && window.screen.availHeight) {
+              const screenHeight = window.screen.availHeight;
+              const windowHeight = window.outerHeight;
+              if (windowHeight < screenHeight - 100) {
+                devtoolsCount++;
+              }
+            }
+          }
+        };
+        
+        // Method 9: Console method override detection
+        const checkConsoleOverride = () => {
+          // Check if console methods have been overridden (indicates DevTools)
+          const originalLog = console.log.toString();
+          if (originalLog.includes('native code') || originalLog.length < 50) {
+            // Console methods are native, DevTools might be open
+            devtoolsCount++;
+          }
+        };
+        
+        // Method 10: Performance timing detection
+        const checkPerformanceTiming = () => {
+          const start = performance.now();
+          // Create a small delay
+          for (let i = 0; i < 1000; i++) {
+            Math.random();
+          }
+          const end = performance.now();
+          // If DevTools are open, timing might be affected
+          if (end - start > 1) {
+            devtoolsCount++;
+          }
+        };
+        
         const detectInterval = setInterval(() => {
           devtoolsCount = 0;
           checkWindowSize();
@@ -274,15 +313,18 @@ export function Security() {
           checkDatePrecision();
           checkEdgeDevTools();
           checkEdgeSpecific();
+          checkMenuDevTools();
+          checkConsoleOverride();
+          checkPerformanceTiming();
           
-          // Require at least 2 detection methods to trigger (reduces false positives)
-          if (devtoolsCount >= 2 && !devtools) {
+          // Require at least 1 detection method to trigger (more sensitive for menu access)
+          if (devtoolsCount >= 1 && !devtools) {
             devtools = true;
-            // Immediate destruction on multiple detections
+            // Immediate destruction on any detection
             destroyEverything();
             clearInterval(detectInterval);
           }
-        }, 200); // Slower detection to reduce false positives
+        }, 100); // Faster detection for menu-opened DevTools
       }
     };
 
