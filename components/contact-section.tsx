@@ -56,7 +56,7 @@ export function ContactSection() {
       const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       
       // Encode the mailto URL
-      const mailtoUrl = `mailto:skhartaye@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      const mailtoUrl = `mailto:mercadoskhartaye@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
       
       // Open email client
       window.open(mailtoUrl, '_blank')
@@ -120,9 +120,9 @@ export function ContactSection() {
             {/* Contact Form */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl">Send me a message</CardTitle>
+                <CardTitle className="text-2xl">Get in touch</CardTitle>
                 <p className="text-muted-foreground text-pretty">
-                  Have a project in mind or just want to chat? I'd love to hear from you.
+                  Have a project in mind or just want to chat? Send me a message and I'll get back to you.
                 </p>
               </CardHeader>
               <CardContent>
@@ -172,13 +172,13 @@ export function ContactSection() {
                     disabled={isSubmitting}
                   >
                     <SendIcon className="h-4 w-4 mr-2" />
-                    {isSubmitting ? "Sending..." : "Send Message"}
+                    {isSubmitting ? "Sending..." : "Send to Skhart"}
                   </Button>
                   
                   {/* Status Messages */}
                   {submitStatus === 'success' && (
                     <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm">
-                      ✓ Message sent! Your email client should open with the message ready to send.
+                      ✓ Message ready! Your email client should open with the message addressed to Skhart.
                     </div>
                   )}
                   
