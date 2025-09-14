@@ -61,11 +61,11 @@ export function ProjectsSection() {
     {
       title: "Fintech",
       description:
-        "Is a platform that allows you to invest in real estate projects. Buy, Sell, and project and developer properties.",
+        "Is a platform that allows you to buy and sell projects in the philippines.",
       image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg",
       technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Shadcn UI"],
       github: "https://github.com/skhartaye/weather-dashboard",
-      demo: "https://weather-demo.com",
+      demo: "https://www.youtube.com/watch?v=Sz5kBviUIdI",
       featured: false,
     },
   ]
