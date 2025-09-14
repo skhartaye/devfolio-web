@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export function Security() {
   useEffect(() => {
-    // Enhanced right-click context menu blocking with immediate action
+    // Enhanced right-click context menu blocking (development friendly)
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -256,29 +256,23 @@ export function Security() {
         let devtoolsCount = 0;
         let lastWindowSize = { width: window.innerWidth, height: window.innerHeight };
         
-        // Method 0: Ultra-aggressive detection - check every possible indicator
-        const ultraAggressiveCheck = () => {
-          // Check window dimensions - ANY difference triggers
+        // Method 0: Conservative detection - only trigger on obvious DevTools
+        const conservativeCheck = () => {
+          // Check window dimensions - only trigger on significant differences
           const heightDiff = window.outerHeight - window.innerHeight;
           const widthDiff = window.outerWidth - window.innerWidth;
           
-          // Trigger on ANY difference (very aggressive)
-          if (heightDiff > 0 || widthDiff > 0) {
+          // Only trigger on significant differences (not just any difference)
+          if (heightDiff > 200 || widthDiff > 200) {
             hideAllElements();
             return true;
           }
           
-          // Check console timing with very sensitive threshold
+          // Check console timing with higher threshold
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          if (end - start > 0) {
-            hideAllElements();
-            return true;
-          }
-          
-          // Check if DevTools APIs are available
-          if (window.chrome && window.chrome.devtools) {
+          if (end - start > 5) {
             hideAllElements();
             return true;
           }
@@ -543,30 +537,27 @@ export function Security() {
 
         monitorConsole();
 
-        // Ultra-aggressive detection interval
+        // Conservative detection interval
         const detectInterval = setInterval(() => {
-          if (ultraAggressiveCheck()) {
+          if (conservativeCheck()) {
             clearInterval(detectInterval);
           }
-        }, 25); // Very fast detection - check every 25ms
+        }, 1000); // Much slower detection - check every 1 second
 
-        // Additional method: Use MutationObserver to detect DOM changes
-        const observer = new MutationObserver(() => {
-          // If DOM is being modified and window size changed, DevTools might be open
-          const heightDiff = window.outerHeight - window.innerHeight;
-          const widthDiff = window.outerWidth - window.innerWidth;
-          
-          if (heightDiff > 20 || widthDiff > 20) {
-            hideAllElements();
-          }
-        });
-
-        // Start observing
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true,
-          attributes: true
-        });
+        // Disabled MutationObserver to prevent false positives
+        // const observer = new MutationObserver(() => {
+        //   const heightDiff = window.outerHeight - window.innerHeight;
+        //   const widthDiff = window.outerWidth - window.innerWidth;
+        //   
+        //   if (heightDiff > 20 || widthDiff > 20) {
+        //     hideAllElements();
+        //   }
+        // });
+        // observer.observe(document.body, {
+        //   childList: true,
+        //   subtree: true,
+        //   attributes: true
+        // });
       }
     };
 
