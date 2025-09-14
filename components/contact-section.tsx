@@ -17,6 +17,8 @@ export function ContactSection() {
     email: "",
     message: "",
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -36,12 +38,44 @@ export function ContactSection() {
     return () => observer.disconnect()
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
-    // Reset form
-    setFormData({ name: "", email: "", message: "" })
+    
+    // Validate form
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setSubmitStatus('error')
+      return
+    }
+    
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      // Create mailto link with form data
+      const subject = `Contact from ${formData.name} - Portfolio Website`
+      const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      
+      // Encode the mailto URL
+      const mailtoUrl = `mailto:skhartaye@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      
+      // Open email client
+      window.open(mailtoUrl, '_blank')
+      
+      // Show success message
+      setSubmitStatus('success')
+      
+      // Reset form after a short delay
+      setTimeout(() => {
+        setFormData({ name: "", email: "", message: "" })
+        setSubmitStatus('idle')
+      }, 3000)
+      
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,25 +89,19 @@ export function ContactSection() {
     {
       icon: GithubIcon,
       label: "GitHub",
-      href: "https://github.com",
+      href: "https://github.com/skhartaye",
       color: "hover:text-gray-900 dark:hover:text-gray-100",
     },
     {
       icon: LinkedinIcon,
       label: "LinkedIn",
-      href: "https://linkedin.com",
+      href: "https://www.linkedin.com/in/skhart-aye-mercado-b2032b383/",
       color: "hover:text-blue-600",
     },
-    {
-      icon: TwitterIcon,
-      label: "Twitter",
-      href: "https://twitter.com",
-      color: "hover:text-blue-400",
-    },
-    {
+    { 
       icon: MailIcon,
       label: "Email",
-      href: "mailto:your.email@example.com",
+      href: "mailto:mercadoskhartaye@gmail.com",
       color: "hover:text-primary",
     },
   ]
@@ -137,10 +165,28 @@ export function ContactSection() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg">
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    size="lg" 
+                    disabled={isSubmitting}
+                  >
                     <SendIcon className="h-4 w-4 mr-2" />
-                    Send Message
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
+                  
+                  {/* Status Messages */}
+                  {submitStatus === 'success' && (
+                    <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm">
+                      ✓ Message sent! Your email client should open with the message ready to send.
+                    </div>
+                  )}
+                  
+                  {submitStatus === 'error' && (
+                    <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-md text-red-800 text-sm">
+                      ✗ Please fill in all fields before sending your message.
+                    </div>
+                  )}
                 </form>
               </CardContent>
             </Card>
@@ -199,7 +245,7 @@ export function ContactSection() {
 
       {/* Footer */}
       <div className="mt-20 pt-8 border-t border-border text-center">
-        <p className="text-muted-foreground">© 2024 Your Name. Built with Next.js and Tailwind CSS.</p>
+        <p className="text-muted-foreground">© 2025 Skhart Aye Mercado.</p>
       </div>
     </section>
   )

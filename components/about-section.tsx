@@ -26,18 +26,15 @@ export function AboutSection() {
   }, [])
 
   const skills = [
+    "Python",
+    "Move",
+    "C++",
+    "PHP",
+    "PostgreSQL",
+    "Docker",
     "JavaScript",
     "TypeScript",
     "React",
-    "Next.js",
-    "Node.js",
-    "Python",
-    "PostgreSQL",
-    "MongoDB",
-    "AWS",
-    "Docker",
-    "Git",
-    "Figma",
   ]
 
   return (
@@ -54,8 +51,12 @@ export function AboutSection() {
             <div className="space-y-6">
               <Card>
                 <CardContent className="p-6">
-                  <div className="w-32 h-32 bg-gradient-to-br from-primary to-accent rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-primary-foreground">YN</span>
+                  <div className="mx-auto mb-6" style={{ width: '306px', height: '248px' }}>
+                    <img
+                      src="/skhart.jpg"
+                      alt="Skhart"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -64,16 +65,18 @@ export function AboutSection() {
             <div className="space-y-6">
               <div className="text-lg text-muted-foreground space-y-4 text-pretty">
                 <p>
-                  I'm a passionate full-stack developer with over 3 years of experience creating digital solutions that
-                  make a difference. I love turning complex problems into simple, beautiful, and intuitive designs.
+                  I'm a passionate developer specializing in Python, Move, C++, and PHP. I create robust applications 
+                  with PostgreSQL databases and containerized deployments using Docker. I love solving complex problems 
+                  with clean, efficient code.
                 </p>
                 <p>
-                  When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects,
-                  or sharing knowledge with the developer community through blog posts and talks.
+                  My expertise spans from low-level systems programming in C++ to modern web development with JavaScript 
+                  and TypeScript. I enjoy building scalable solutions and exploring new technologies in the blockchain 
+                  and IoT space.
                 </p>
                 <p>
-                  I believe in writing clean, maintainable code and creating user experiences that are both functional
-                  and delightful.
+                  I believe in writing maintainable, well-documented code and creating applications that are both 
+                  performant and user-friendly. My goal is to build solutions that make a real impact.
                 </p>
               </div>
 

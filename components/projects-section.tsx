@@ -31,39 +31,42 @@ export function ProjectsSection() {
     {
       title: "Aeroband - IoT Air Quality Monitor",
       description:
-        "Real-time air quality monitoring system with mobile app and web dashboard. Winner of IoTCon 2024 1st Runner Up.",
+        "Real-time air quality monitoring system with mobile app and web dashboard. Winner of IoTCon 2025 1st Runner Up. Built with React,TypeScript,netlify, Neon Postgres, and Move.",
       image: "/iot-air-quality-monitoring-device-dashboard.jpg",
-      technologies: ["React", "Node.js", "IoT", "MongoDB", "Express"],
-      github: "https://github.com",
-      demo: "https://demo.com",
+      technologies: ["React", "TypeScript", "Netlify", "Neon Postgres", "Move"],
+      github: "https://github.com/skhartaye/aeroband",
+      demo: "https://aeroband-demo.com",
       featured: true,
     },
     {
-      title: "E-Commerce Platform",
+      title: "Smoki - Smart Smoke Detection System",
       description:
-        "Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.",
-      image: "/modern-ecommerce-interface.png",
-      technologies: ["Next.js", "TypeScript", "Stripe", "PostgreSQL"],
-      github: "https://github.com",
-      demo: "https://demo.com",
-    },
-    {
-      title: "Task Management App",
-      description:
-        "Collaborative task management tool with real-time updates, team collaboration, and progress tracking.",
+        "Advanced vehicle smoke detection system using IoT sensors and machine learning algorithms. Real-time monitoring with instant alerts and automated safety responses.",
       image: "/task-management-app-interface-kanban-board.jpg",
-      technologies: ["React", "Firebase", "Material-UI", "WebSocket"],
-      github: "https://github.com",
-      demo: "https://demo.com",
+      technologies: ["Python", "C++", "PostgreSQL", "Docker", "IoT", "Machine Learning"],
+      github: "https://github.com/skhartaye/smoki",
+      demo: "https://smoki-demo.com",
+      featured: true,
     },
     {
-      title: "Weather Analytics Dashboard",
+      title: "Aerocore",
       description:
-        "Data visualization dashboard for weather patterns with interactive charts and predictive analytics.",
+        " A Gamefinance powered by Aptos chain. it lets you stake your assets to earn rewards.",
+      image: "/modern-ecommerce-interface.png",
+      technologies: ["Aptos", "Move", "React", "TypeScript", "Next.js", "Tailwind CSS"],
+      github: "https://github.com/skhartaye/aerocore",
+      demo: "https://aerocore-demo.com",
+      featured: false,
+    },
+    {
+      title: "Fintech",
+      description:
+        "Is a platform that allows you to invest in real estate projects.",
       image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg",
-      technologies: ["Vue.js", "D3.js", "Python", "FastAPI"],
-      github: "https://github.com",
-      demo: "https://demo.com",
+      technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Shadcn UI"],
+      github: "https://github.com/skhartaye/weather-dashboard",
+      demo: "https://weather-demo.com",
+      featured: false,
     },
   ]
 
@@ -77,13 +80,12 @@ export function ProjectsSection() {
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-balance">Featured Projects</h2>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
+          {/* Featured Projects */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {projects.filter(project => project.featured).map((project, index) => (
               <Card
                 key={index}
-                className={`group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${
-                  project.featured ? "ring-2 ring-primary/20" : ""
-                }`}
+                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ring-2 ring-primary/20"
               >
                 <CardHeader className="p-0">
                   <div className="relative overflow-hidden rounded-t-lg">
@@ -92,7 +94,7 @@ export function ProjectsSection() {
                       alt={project.title}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {project.featured && <Badge className="absolute top-4 left-4 bg-primary">Featured</Badge>}
+                    <Badge className="absolute top-4 left-4 bg-primary">Featured</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
@@ -117,6 +119,59 @@ export function ProjectsSection() {
                     <Button size="sm" asChild>
                       <a href={project.demo} target="_blank" rel="noopener noreferrer">
                         <ExternalLinkIcon className="h-4 w-4 mr-2" />
+                        Demo
+                      </a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Other Projects */}
+          <h3 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-balance">Other Projects</h3>
+          <div className="grid md:grid-cols-2 gap-6">
+            {projects.filter(project => !project.featured).map((project, index) => (
+              <Card
+                key={index}
+                className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              >
+                <CardHeader className="p-0">
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img
+                      src={project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <CardTitle className="text-lg mb-2 text-balance">{project.title}</CardTitle>
+                  <p className="text-muted-foreground mb-3 text-sm text-pretty">{project.description}</p>
+
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                      <Badge key={tech} variant="secondary" className="text-xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                    {project.technologies.length > 4 && (
+                      <Badge variant="outline" className="text-xs">
+                        +{project.technologies.length - 4} more
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={project.github} target="_blank" rel="noopener noreferrer">
+                        <GithubIcon className="h-3 w-3 mr-1" />
+                        Code
+                      </a>
+                    </Button>
+                    <Button size="sm" asChild>
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                        <ExternalLinkIcon className="h-3 w-3 mr-1" />
                         Demo
                       </a>
                     </Button>

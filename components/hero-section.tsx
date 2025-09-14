@@ -23,7 +23,7 @@ export function HeroSection() {
           }`}
         >
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-balance mb-6">
-            Hi, I'm <span className="text-primary">Your Name</span>
+            Hi, I'm <span className="text-primary">Skhart</span>
             <br />
             <span className="text-2xl sm:text-4xl lg:text-5xl text-muted-foreground">
               a passionate developer building innovative solutions
@@ -31,8 +31,8 @@ export function HeroSection() {
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
-            I create digital experiences that combine beautiful design with powerful functionality. Let's build
-            something amazing together.
+            I specialize in Python, Move, C++, PHP, and modern web technologies. I create robust applications 
+            with PostgreSQL, Docker, and clean code architecture. Let's build something amazing together.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -45,7 +45,7 @@ export function HeroSection() {
           </div>
 
           <div className="flex justify-center space-x-6">
-            <a href="https://github.com" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="https://github.com/skhartaye" className="text-muted-foreground hover:text-primary transition-colors">
               <GithubIcon className="h-6 w-6" />
               <span className="sr-only">GitHub</span>
             </a>

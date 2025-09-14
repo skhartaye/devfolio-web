@@ -29,31 +29,17 @@ export function AchievementsSection() {
   const achievements = [
     {
       icon: TrophyIcon,
-      title: "IoTCon 2024 - 1st Runner Up",
+      title: "IoTCon 2025 - 1st Runner Up",
       description: "Aeroband Project - Innovative IoT solution for air quality monitoring",
-      date: "2024",
+      date: "2025",
       type: "Hackathon",
     },
     {
       icon: AwardIcon,
-      title: "Best Mobile App Design",
-      description: "University Tech Fair - Recognized for outstanding UI/UX design",
-      date: "2023",
-      type: "Award",
-    },
-    {
-      icon: CertificateIcon,
-      title: "AWS Certified Developer",
-      description: "Associate level certification for cloud development",
-      date: "2023",
-      type: "Certification",
-    },
-    {
-      icon: StarIcon,
-      title: "Open Source Contributor",
-      description: "50+ contributions to popular React and Node.js projects",
-      date: "Ongoing",
-      type: "Community",
+      title: "Aeroband Project",
+      description: "Featured IoT project showcasing innovative air quality monitoring solution",
+      date: "2025",
+      type: "Project",
     },
   ]
 
@@ -67,7 +53,7 @@ export function AchievementsSection() {
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-balance">Achievements & Recognition</h2>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {achievements.map((achievement, index) => {
               const IconComponent = achievement.icon
               return (

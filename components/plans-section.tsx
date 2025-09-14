@@ -31,34 +31,25 @@ export function PlansSection() {
       icon: RocketIcon,
       title: "Launch SaaS Platform",
       description: "Building a comprehensive project management tool for small teams with AI-powered insights.",
-      timeline: "Q2 2024",
+      timeline: "Q2 2025 and continuing",
       status: "In Progress",
       category: "Project",
     },
     {
       icon: BookOpenIcon,
-      title: "Master Machine Learning",
+      title: "Master Machine Learning and AI",
       description: "Completing advanced ML courses and building AI-powered applications to expand my skill set.",
-      timeline: "2024",
+      timeline: "2025 and continuing",
       status: "Learning",
       category: "Skill",
     },
     {
       icon: UsersIcon,
       title: "Tech Community Leadership",
-      description: "Organizing local developer meetups and mentoring junior developers in the community.",
+      description: "Organizing local developer meetups and student developers in the community.",
       timeline: "Ongoing",
       status: "Active",
       category: "Community",
-    },
-    {
-      icon: TargetIcon,
-      title: "Senior Developer Role",
-      description:
-        "Seeking opportunities to lead development teams and architect scalable solutions at a growth-stage company.",
-      timeline: "2024-2025",
-      status: "Planning",
-      category: "Career",
     },
   ]
 
