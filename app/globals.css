@@ -83,6 +83,28 @@ input, textarea {
   user-select: none !important;
 }
 
+/* Disable zooming */
+html, body {
+  zoom: 1 !important;
+  -webkit-text-size-adjust: 100% !important;
+  -moz-text-size-adjust: 100% !important;
+  -ms-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+  transform: scale(1) !important;
+  -webkit-transform: scale(1) !important;
+  -moz-transform: scale(1) !important;
+  -ms-transform: scale(1) !important;
+}
+
+/* Disable zoom on all elements */
+* {
+  zoom: 1 !important;
+  transform: scale(1) !important;
+  -webkit-transform: scale(1) !important;
+  -moz-transform: scale(1) !important;
+  -ms-transform: scale(1) !important;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

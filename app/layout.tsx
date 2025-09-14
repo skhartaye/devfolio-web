@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Skhart_Aye - Devfolio",
   description: "Passionate developer building innovative solutions",
   generator: "v0.app",
+  viewport: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 }
 
 export default function RootLayout({

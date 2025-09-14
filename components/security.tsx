@@ -4,10 +4,16 @@ import { useEffect } from 'react';
 
 export function Security() {
   useEffect(() => {
-    // Enhanced right-click context menu blocking
+    // Enhanced right-click context menu blocking with immediate action
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      
+      // Immediately hide content when right-click is attempted
+      if (process.env.NODE_ENV === 'production') {
+        hideAllElements();
+      }
+      
       return false;
     };
 
@@ -149,9 +155,13 @@ export function Security() {
       return false;
     };
 
-    // Hide all elements function
+    // Hide all elements function with zoom prevention
     const hideAllElements = () => {
       if (process.env.NODE_ENV === 'production') {
+        // Disable zooming immediately
+        document.body.style.zoom = '1';
+        document.documentElement.style.zoom = '1';
+        
         // Add a message overlay
         const overlay = document.createElement('div');
         overlay.id = 'devtools-overlay';
@@ -172,6 +182,8 @@ export function Security() {
             text-align: center;
             z-index: 999999;
             cursor: none;
+            zoom: 1 !important;
+            transform: scale(1) !important;
           ">
             <div>
               <h1>Access Restricted</h1>
@@ -180,6 +192,17 @@ export function Security() {
           </div>
         `;
         document.body.appendChild(overlay);
+        
+        // Disable all zoom methods
+        const disableZoom = () => {
+          document.body.style.zoom = '1';
+          document.documentElement.style.zoom = '1';
+          document.body.style.transform = 'scale(1)';
+          document.documentElement.style.transform = 'scale(1)';
+        };
+        
+        // Continuously disable zoom
+        const zoomInterval = setInterval(disableZoom, 10);
         
         // Start monitoring for DevTools closure
         const checkDevToolsClosed = setInterval(() => {
@@ -193,6 +216,7 @@ export function Security() {
               overlay.remove();
             }
             clearInterval(checkDevToolsClosed);
+            clearInterval(zoomInterval);
           }
         }, 500);
       }
@@ -230,27 +254,58 @@ export function Security() {
       if (process.env.NODE_ENV === 'production') {
         let devtools = false;
         let devtoolsCount = 0;
+        let lastWindowSize = { width: window.innerWidth, height: window.innerHeight };
         
-        // Method 1: Window size detection (enhanced for menu DevTools)
-        const checkWindowSize = () => {
-          const threshold = 200; // Lowered to catch menu-opened DevTools
+        // Method 0: Ultra-aggressive detection - check every possible indicator
+        const ultraAggressiveCheck = () => {
+          // Check window dimensions - ANY difference triggers
           const heightDiff = window.outerHeight - window.innerHeight;
           const widthDiff = window.outerWidth - window.innerWidth;
           
-          // Check for DevTools opened from menu (smaller differences)
-          if ((heightDiff > threshold && heightDiff < 800) || 
-              (widthDiff > threshold && widthDiff < 800)) {
+          // Trigger on ANY difference (very aggressive)
+          if (heightDiff > 0 || widthDiff > 0) {
+            hideAllElements();
+            return true;
+          }
+          
+          // Check console timing with very sensitive threshold
+          const start = performance.now();
+          console.clear();
+          const end = performance.now();
+          if (end - start > 0) {
+            hideAllElements();
+            return true;
+          }
+          
+          // Check if DevTools APIs are available
+          if (window.chrome && window.chrome.devtools) {
+            hideAllElements();
+            return true;
+          }
+          
+          return false;
+        };
+        
+        // Method 1: Window size detection (very sensitive for menu DevTools)
+        const checkWindowSize = () => {
+          const threshold = 100; // Much lower threshold to catch menu-opened DevTools
+          const heightDiff = window.outerHeight - window.innerHeight;
+          const widthDiff = window.outerWidth - window.innerWidth;
+          
+          // Check for DevTools opened from menu (even smaller differences)
+          if ((heightDiff > threshold && heightDiff < 1000) || 
+              (widthDiff > threshold && widthDiff < 1000)) {
             devtoolsCount++;
           }
         };
         
-        // Method 2: Console detection (enhanced for menu DevTools)
+        // Method 2: Console detection (very sensitive for menu DevTools)
         const checkConsole = () => {
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          // Lowered threshold to catch menu-opened DevTools
-          if (end - start > 3) {
+          // Much lower threshold to catch menu-opened DevTools
+          if (end - start > 1) {
             devtoolsCount++;
           }
         };
@@ -400,31 +455,118 @@ export function Security() {
           }
         };
         
-        const detectInterval = setInterval(() => {
-          devtoolsCount = 0;
-          checkWindowSize();
-          checkConsole();
-          checkDebugger();
-          checkFunctionToString();
-          checkDatePrecision();
-          checkEdgeDevTools();
-          checkEdgeSpecific();
-          checkMenuDevTools();
-          checkConsoleOverride();
-          checkPerformanceTiming();
-          checkMenuDevToolsSpecific();
-          checkDevToolsAPI();
-          checkConsoleMethods();
-          checkWindowFocus();
+        // Method 15: Aggressive menu DevTools detection
+        const checkAggressiveMenuDevTools = () => {
+          // Check for any window size difference (very aggressive)
+          if (window.outerHeight !== window.innerHeight || window.outerWidth !== window.innerWidth) {
+            const heightDiff = window.outerHeight - window.innerHeight;
+            const widthDiff = window.outerWidth - window.innerWidth;
+            
+            // Even the smallest differences could indicate DevTools
+            if (heightDiff > 50 || widthDiff > 50) {
+              devtoolsCount++;
+            }
+          }
+        };
+        
+        // Method 16: Console performance detection
+        const checkConsolePerformance = () => {
+          // More aggressive console timing check
+          const start = performance.now();
+          console.log('test');
+          console.clear();
+          const end = performance.now();
           
-          // Require at least 2 detection methods to trigger (balanced approach)
-          if (devtoolsCount >= 2 && !devtools) {
-            devtools = true;
-            // Hide all elements instead of destroying (less disruptive for menu DevTools)
-            hideAllElements();
+          // Very sensitive timing detection
+          if (end - start > 0.5) {
+            devtoolsCount++;
+          }
+        };
+        
+        // Method 17: Window resize detection
+        const checkWindowResize = () => {
+          // Check if window has been resized (common when DevTools open)
+          if (window.outerHeight !== window.innerHeight || window.outerWidth !== window.innerWidth) {
+            // Check for typical DevTools sizes
+            const heightDiff = window.outerHeight - window.innerHeight;
+            const widthDiff = window.outerWidth - window.innerWidth;
+            
+            // Menu-opened DevTools often have specific size patterns
+            if ((heightDiff > 80 && heightDiff < 500) || (widthDiff > 80 && widthDiff < 500)) {
+              devtoolsCount++;
+            }
+          }
+        };
+        
+        // Add window resize listener for immediate detection
+        const handleWindowResize = () => {
+          const currentSize = { width: window.innerWidth, height: window.innerHeight };
+          const outerSize = { width: window.outerWidth, height: window.outerHeight };
+          
+          // Check if window size changed significantly (DevTools opened)
+          if (outerSize.width !== currentSize.width || outerSize.height !== currentSize.height) {
+            const widthDiff = outerSize.width - currentSize.width;
+            const heightDiff = outerSize.height - currentSize.height;
+            
+            // If there's any significant difference, DevTools might be open
+            if (widthDiff > 50 || heightDiff > 50) {
+              hideAllElements();
+            }
+          }
+        };
+
+        // Add resize event listener
+        window.addEventListener('resize', handleWindowResize);
+
+        // Additional aggressive detection using console monitoring
+        const monitorConsole = () => {
+          let consoleOpen = false;
+          const checkConsoleOpen = () => {
+            const start = Date.now();
+            console.clear();
+            const end = Date.now();
+            
+            // If console.clear takes time, DevTools are likely open
+            if (end - start > 0) {
+              if (!consoleOpen) {
+                consoleOpen = true;
+                hideAllElements();
+              }
+            } else {
+              consoleOpen = false;
+            }
+          };
+          
+          // Check console every 50ms
+          setInterval(checkConsoleOpen, 50);
+        };
+
+        monitorConsole();
+
+        // Ultra-aggressive detection interval
+        const detectInterval = setInterval(() => {
+          if (ultraAggressiveCheck()) {
             clearInterval(detectInterval);
           }
-        }, 200); // Faster detection for menu-opened DevTools
+        }, 25); // Very fast detection - check every 25ms
+
+        // Additional method: Use MutationObserver to detect DOM changes
+        const observer = new MutationObserver(() => {
+          // If DOM is being modified and window size changed, DevTools might be open
+          const heightDiff = window.outerHeight - window.innerHeight;
+          const widthDiff = window.outerWidth - window.innerWidth;
+          
+          if (heightDiff > 20 || widthDiff > 20) {
+            hideAllElements();
+          }
+        });
+
+        // Start observing
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true
+        });
       }
     };
 
@@ -436,12 +578,100 @@ export function Security() {
       }
     };
 
-    // Add event listeners
+    // Disable zooming through keyboard shortcuts
+    const handleZoomPrevention = (e: KeyboardEvent) => {
+      // Prevent Ctrl + Plus/Minus/0 (zoom in/out/reset)
+      if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '-' || e.key === '0' || e.key === '=')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+      
+      // Prevent Ctrl + Mouse wheel zoom
+      if (e.ctrlKey && (e.key === 'WheelUp' || e.key === 'WheelDown')) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    // Disable mouse wheel zoom
+    const handleWheelZoom = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    // Disable touch zoom
+    const handleTouchZoom = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    };
+
+    // Add comprehensive event listeners to prevent DevTools access
     document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
     document.addEventListener('selectstart', handleSelectStart);
     document.addEventListener('dragstart', handleDragStart);
+    
+    // Add zoom prevention event listeners
+    document.addEventListener('keydown', handleZoomPrevention);
+    document.addEventListener('wheel', handleWheelZoom, { passive: false });
+    document.addEventListener('touchstart', handleTouchZoom, { passive: false });
+    document.addEventListener('touchmove', handleTouchZoom, { passive: false });
+
+    // Additional comprehensive prevention
+    window.addEventListener('contextmenu', handleContextMenu);
+    document.body.addEventListener('contextmenu', handleContextMenu);
+    
+    // Prevent F12 and other DevTools shortcuts more aggressively
+    document.addEventListener('keydown', (e) => {
+      // F12 key
+      if (e.key === 'F12') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (process.env.NODE_ENV === 'production') {
+          hideAllElements();
+        }
+        return false;
+      }
+      
+      // Ctrl+Shift+I (Inspect Element)
+      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (process.env.NODE_ENV === 'production') {
+          hideAllElements();
+        }
+        return false;
+      }
+      
+      // Ctrl+Shift+J (Console)
+      if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (process.env.NODE_ENV === 'production') {
+          hideAllElements();
+        }
+        return false;
+      }
+      
+      // Ctrl+Shift+C (Element Inspector)
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        e.stopPropagation();
+        if (process.env.NODE_ENV === 'production') {
+          hideAllElements();
+        }
+        return false;
+      }
+    });
 
     // Override console and clear it
     overrideConsole();
@@ -453,6 +683,22 @@ export function Security() {
     // Clear console every 50ms for better protection (only in production)
     const interval = process.env.NODE_ENV === 'production' 
       ? setInterval(clearConsole, 50)
+      : null;
+
+    // Continuously reset zoom (only in production)
+    const zoomResetInterval = process.env.NODE_ENV === 'production' 
+      ? setInterval(() => {
+          document.body.style.zoom = '1';
+          document.documentElement.style.zoom = '1';
+          document.body.style.transform = 'scale(1)';
+          document.documentElement.style.transform = 'scale(1)';
+          
+          // Reset viewport meta tag if it exists
+          const viewport = document.querySelector('meta[name="viewport"]');
+          if (viewport) {
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+          }
+        }, 100)
       : null;
 
     // Additional security: Disable common debugging methods (only in production)
