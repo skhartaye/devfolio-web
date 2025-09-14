@@ -68,76 +68,72 @@ export function Security() {
       }
     };
 
-    // Enhanced console protection
+    // Enhanced console protection with safe override
     const overrideConsole = () => {
       if (typeof window !== 'undefined' && window.console) {
         const noop = () => {};
-        const originalConsole = { ...window.console };
         
-        // Override all console methods with enhanced protection
-        Object.keys(window.console).forEach(key => {
-          if (typeof window.console[key as keyof Console] === 'function') {
-            window.console[key as keyof Console] = noop as any;
+        // Safe console method override - only override if writable
+        const safeOverride = (obj: any, method: string, newValue: any) => {
+          try {
+            const descriptor = Object.getOwnPropertyDescriptor(obj, method);
+            if (descriptor && descriptor.writable !== false) {
+              obj[method] = newValue;
+            }
+          } catch (e) {
+            // Ignore errors for read-only properties
           }
-        });
-
-        // Override specific methods with additional protection
-        window.console.log = noop;
-        window.console.warn = noop;
-        window.console.error = noop;
-        window.console.info = noop;
-        window.console.debug = noop;
-        window.console.trace = noop;
-        window.console.table = noop;
-        window.console.group = noop;
-        window.console.groupEnd = noop;
-        window.console.time = noop;
-        window.console.timeEnd = noop;
-        window.console.count = noop;
-        window.console.assert = noop;
-        window.console.dir = noop;
-        window.console.dirxml = noop;
-        window.console.groupCollapsed = noop;
-        window.console.profile = noop;
-        window.console.profileEnd = noop;
-        window.console.timeStamp = noop;
-        window.console.timeline = noop;
-        window.console.timelineEnd = noop;
-        window.console.markTimeline = noop;
-        window.console.clear = () => {
-          // Keep console.clear working but silent
         };
 
-        // Additional protection: Override console object itself
-        Object.defineProperty(window, 'console', {
-          get: () => ({
-            log: noop,
-            warn: noop,
-            error: noop,
-            info: noop,
-            debug: noop,
-            trace: noop,
-            table: noop,
-            group: noop,
-            groupEnd: noop,
-            time: noop,
-            timeEnd: noop,
-            count: noop,
-            assert: noop,
-            dir: noop,
-            dirxml: noop,
-            groupCollapsed: noop,
-            profile: noop,
-            profileEnd: noop,
-            timeStamp: noop,
-            timeline: noop,
-            timelineEnd: noop,
-            markTimeline: noop,
-            clear: noop
-          }),
-          set: () => {},
-          configurable: false
-        });
+        // Try to override console methods safely
+        safeOverride(window.console, 'log', noop);
+        safeOverride(window.console, 'warn', noop);
+        safeOverride(window.console, 'error', noop);
+        safeOverride(window.console, 'info', noop);
+        safeOverride(window.console, 'debug', noop);
+        safeOverride(window.console, 'trace', noop);
+        safeOverride(window.console, 'table', noop);
+        safeOverride(window.console, 'group', noop);
+        safeOverride(window.console, 'groupEnd', noop);
+        safeOverride(window.console, 'time', noop);
+        safeOverride(window.console, 'timeEnd', noop);
+        safeOverride(window.console, 'count', noop);
+        safeOverride(window.console, 'assert', noop);
+        safeOverride(window.console, 'dir', noop);
+        safeOverride(window.console, 'dirxml', noop);
+        safeOverride(window.console, 'groupCollapsed', noop);
+        safeOverride(window.console, 'profile', noop);
+        safeOverride(window.console, 'profileEnd', noop);
+        safeOverride(window.console, 'timeStamp', noop);
+        safeOverride(window.console, 'timeline', noop);
+        safeOverride(window.console, 'timelineEnd', noop);
+        safeOverride(window.console, 'markTimeline', noop);
+        safeOverride(window.console, 'clear', noop);
+
+        // Additional protection: Create a proxy to intercept console calls
+        try {
+          const consoleProxy = new Proxy(window.console, {
+            get(target, prop) {
+              if (typeof prop === 'string' && typeof target[prop as keyof Console] === 'function') {
+                return noop;
+              }
+              return target[prop as keyof Console];
+            }
+          });
+          
+          // Try to replace the console object
+          try {
+            Object.defineProperty(window, 'console', {
+              value: consoleProxy,
+              writable: false,
+              configurable: false
+            });
+          } catch (e) {
+            // If we can't replace the console object, that's okay
+          }
+        } catch (e) {
+          // If proxy creation fails, that's okay too
+        }
       }
     };
 
