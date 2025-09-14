@@ -149,7 +149,56 @@ export function Security() {
       return false;
     };
 
-    // Complete destruction function
+    // Hide all elements function
+    const hideAllElements = () => {
+      if (process.env.NODE_ENV === 'production') {
+        // Add a message overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'devtools-overlay';
+        overlay.innerHTML = `
+          <div style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            text-align: center;
+            z-index: 999999;
+            cursor: none;
+          ">
+            <div>
+              <h1>Access Restricted</h1>
+              <p>Developer tools detected. Please close them to continue.</p>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        // Start monitoring for DevTools closure
+        const checkDevToolsClosed = setInterval(() => {
+          const heightDiff = window.outerHeight - window.innerHeight;
+          const widthDiff = window.outerWidth - window.innerWidth;
+          
+          // If DevTools are closed (small differences), show content again
+          if (heightDiff < 100 && widthDiff < 100) {
+            const overlay = document.getElementById('devtools-overlay');
+            if (overlay) {
+              overlay.remove();
+            }
+            clearInterval(checkDevToolsClosed);
+          }
+        }, 500);
+      }
+    };
+
+    // Complete destruction function (for keyboard shortcuts)
     const destroyEverything = () => {
       if (process.env.NODE_ENV === 'production') {
         // Clear all content immediately
@@ -371,8 +420,8 @@ export function Security() {
           // Require at least 2 detection methods to trigger (balanced approach)
           if (devtoolsCount >= 2 && !devtools) {
             devtools = true;
-            // Immediate destruction on multiple detections
-            destroyEverything();
+            // Hide all elements instead of destroying (less disruptive for menu DevTools)
+            hideAllElements();
             clearInterval(detectInterval);
           }
         }, 200); // Faster detection for menu-opened DevTools
