@@ -105,6 +105,16 @@ html, body {
   -ms-transform: scale(1) !important;
 }
 
+/* Floating animation for scroll-to-top button */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
