@@ -4,11 +4,10 @@ import { useEffect } from 'react';
 
 export function Security() {
   useEffect(() => {
-    // Enhanced right-click context menu blocking with destruction
+    // Enhanced right-click context menu blocking
     const handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      destroyEverything();
       return false;
     };
 
@@ -27,11 +26,21 @@ export function Security() {
         return false;
       }
       
-      // Block all DevTools shortcuts with immediate destruction
+      // Block only actual DevTools shortcuts with immediate destruction
       if (
         (ctrl && shift && (key === 'i' || key === 'j' || key === 'c' || key === 'k')) ||
         (alt && shift && key === 'i') ||
         (ctrl && key === 'u') ||
+        (key === 'f12')
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        destroyEverything();
+        return false;
+      }
+      
+      // Block other shortcuts but don't destroy everything
+      if (
         (ctrl && key === 's') ||
         (ctrl && key === 'a') ||
         (ctrl && key === 'p') ||
@@ -41,20 +50,17 @@ export function Security() {
         (ctrl && key === 'r') ||
         (ctrl && key === 'f5') ||
         (key === 'f5') ||
-        (key === 'f11') ||
-        (key === 'f12')
+        (key === 'f11')
       ) {
         e.preventDefault();
         e.stopPropagation();
-        destroyEverything();
         return false;
       }
     };
 
-    // Disable text selection with destruction
+    // Disable text selection
     const handleSelectStart = (e: Event) => {
       e.preventDefault();
-      destroyEverything();
       return false;
     };
 
@@ -137,10 +143,9 @@ export function Security() {
       }
     };
 
-    // Disable drag and drop with destruction
+    // Disable drag and drop
     const handleDragStart = (e: DragEvent) => {
       e.preventDefault();
-      destroyEverything();
       return false;
     };
 
@@ -177,21 +182,26 @@ export function Security() {
         let devtools = false;
         let devtoolsCount = 0;
         
-        // Method 1: Window size detection
+        // Method 1: Window size detection (more conservative)
         const checkWindowSize = () => {
-          const threshold = 160;
-          if (window.outerHeight - window.innerHeight > threshold || 
-              window.outerWidth - window.innerWidth > threshold) {
+          const threshold = 200; // Increased threshold to reduce false positives
+          const heightDiff = window.outerHeight - window.innerHeight;
+          const widthDiff = window.outerWidth - window.innerWidth;
+          
+          // Only trigger if the difference is significant and consistent
+          if ((heightDiff > threshold && heightDiff < 1000) || 
+              (widthDiff > threshold && widthDiff < 1000)) {
             devtoolsCount++;
           }
         };
         
-        // Method 2: Console detection
+        // Method 2: Console detection (more reliable)
         const checkConsole = () => {
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          if (end - start > 1) {
+          // Increased threshold to reduce false positives
+          if (end - start > 5) {
             devtoolsCount++;
           }
         };
@@ -214,11 +224,12 @@ export function Security() {
           }
         };
         
-        // Method 5: Date precision detection
+        // Method 5: Date precision detection (more conservative)
         const checkDatePrecision = () => {
           const start = Date.now();
           const end = Date.now();
-          if (end - start > 1) {
+          // Increased threshold to reduce false positives
+          if (end - start > 3) {
             devtoolsCount++;
           }
         };
@@ -264,21 +275,21 @@ export function Security() {
           checkEdgeDevTools();
           checkEdgeSpecific();
           
-          if (devtoolsCount >= 1 && !devtools) {
+          // Require at least 2 detection methods to trigger (reduces false positives)
+          if (devtoolsCount >= 2 && !devtools) {
             devtools = true;
-            // Immediate destruction on any detection
+            // Immediate destruction on multiple detections
             destroyEverything();
             clearInterval(detectInterval);
           }
-        }, 50); // Even faster detection
+        }, 200); // Slower detection to reduce false positives
       }
     };
 
-    // Disable print screen with destruction
+    // Disable print screen
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === 'PrintScreen') {
         e.preventDefault();
-        destroyEverything();
         return false;
       }
     };
