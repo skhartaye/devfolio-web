@@ -35,7 +35,7 @@ export function ProjectsSection() {
       image: "/iot-air-quality-monitoring-device-dashboard.jpg",
       technologies: ["React", "TypeScript", "Netlify", "Neon Postgres", "Move"],
       github: "https://github.com/skhartaye/aeroband",
-      demo: "https://aeroband-demo.com",
+      demo: "https://www.youtube.com/watch?v=Sz5kBviUIdI",
       featured: true,
     },
     {
@@ -61,7 +61,7 @@ export function ProjectsSection() {
     {
       title: "Fintech",
       description:
-        "Is a platform that allows you to invest in real estate projects.",
+        "Is a platform that allows you to invest in real estate projects. Buy, Sell, and project and developer properties.",
       image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg",
       technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Shadcn UI"],
       github: "https://github.com/skhartaye/weather-dashboard",
@@ -109,20 +109,22 @@ export function ProjectsSection() {
                     ))}
                   </div>
 
-                  <div className="flex gap-3">
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        <GithubIcon className="h-4 w-4 mr-2" />
-                        Code
-                      </a>
-                    </Button>
-                    <Button size="sm" asChild>
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                        <ExternalLinkIcon className="h-4 w-4 mr-2" />
-                        Demo
-                      </a>
-                    </Button>
-                  </div>
+                  {project.title === "Aeroband - IoT Air Quality Monitor" && (
+                    <div className="flex gap-3">
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
+                          <GithubIcon className="h-4 w-4 mr-2" />
+                          Code
+                        </a>
+                      </Button>
+                      <Button size="sm" asChild>
+                        <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                          <ExternalLinkIcon className="h-4 w-4 mr-2" />
+                          Demo
+                        </a>
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -162,20 +164,6 @@ export function ProjectsSection() {
                     )}
                   </div>
 
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        <GithubIcon className="h-3 w-3 mr-1" />
-                        Code
-                      </a>
-                    </Button>
-                    <Button size="sm" asChild>
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                        <ExternalLinkIcon className="h-3 w-3 mr-1" />
-                        Demo
-                      </a>
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
             ))}
