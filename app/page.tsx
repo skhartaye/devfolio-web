@@ -5,6 +5,7 @@ import { ProjectsSection } from "@/components/projects-section"
 import { PlansSection } from "@/components/plans-section"
 import { ContactSection } from "@/components/contact-section"
 import { Navigation } from "@/components/navigation"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <AchievementsSection />
       <PlansSection />
       <ContactSection />
+      <ScrollToTop />
     </main>
   )
 }
