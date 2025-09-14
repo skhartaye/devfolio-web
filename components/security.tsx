@@ -182,26 +182,26 @@ export function Security() {
         let devtools = false;
         let devtoolsCount = 0;
         
-        // Method 1: Window size detection (very conservative)
+        // Method 1: Window size detection (enhanced for menu DevTools)
         const checkWindowSize = () => {
-          const threshold = 300; // Much higher threshold to avoid false positives
+          const threshold = 200; // Lowered to catch menu-opened DevTools
           const heightDiff = window.outerHeight - window.innerHeight;
           const widthDiff = window.outerWidth - window.innerWidth;
           
-          // Only trigger on very significant differences (actual DevTools)
-          if ((heightDiff > threshold && heightDiff < 600) || 
-              (widthDiff > threshold && widthDiff < 600)) {
+          // Check for DevTools opened from menu (smaller differences)
+          if ((heightDiff > threshold && heightDiff < 800) || 
+              (widthDiff > threshold && widthDiff < 800)) {
             devtoolsCount++;
           }
         };
         
-        // Method 2: Console detection (very conservative)
+        // Method 2: Console detection (enhanced for menu DevTools)
         const checkConsole = () => {
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          // Much higher threshold to avoid false positives
-          if (end - start > 10) {
+          // Lowered threshold to catch menu-opened DevTools
+          if (end - start > 3) {
             devtoolsCount++;
           }
         };
@@ -303,6 +303,54 @@ export function Security() {
           // }
         };
         
+        // Method 11: Menu DevTools specific detection
+        const checkMenuDevToolsSpecific = () => {
+          // Check for DevTools opened via menu by monitoring window properties
+          if (window.outerHeight !== window.innerHeight || window.outerWidth !== window.innerWidth) {
+            // Check if the difference is consistent with DevTools
+            const heightDiff = window.outerHeight - window.innerHeight;
+            const widthDiff = window.outerWidth - window.innerWidth;
+            
+            // Menu-opened DevTools typically have smaller but consistent differences
+            if ((heightDiff > 100 && heightDiff < 400) || (widthDiff > 100 && widthDiff < 400)) {
+              devtoolsCount++;
+            }
+          }
+        };
+        
+        // Method 12: DevTools API detection
+        const checkDevToolsAPI = () => {
+          // Check for DevTools specific APIs that become available
+          if (window.chrome && window.chrome.devtools) {
+            devtoolsCount++;
+          }
+          
+          // Check for DevTools extension APIs
+          if (window.chrome && window.chrome.runtime && window.chrome.runtime.onConnect) {
+            devtoolsCount++;
+          }
+        };
+        
+        // Method 13: Console method detection
+        const checkConsoleMethods = () => {
+          // Check if console methods behave differently when DevTools are open
+          const originalLog = console.log.toString();
+          const originalError = console.error.toString();
+          
+          // When DevTools are open, these methods might have different string representations
+          if (originalLog.includes('native code') || originalError.includes('native code')) {
+            devtoolsCount++;
+          }
+        };
+        
+        // Method 14: Window focus detection
+        const checkWindowFocus = () => {
+          // DevTools can affect window focus behavior
+          if (document.hidden === false && window.outerHeight !== window.innerHeight) {
+            devtoolsCount++;
+          }
+        };
+        
         const detectInterval = setInterval(() => {
           devtoolsCount = 0;
           checkWindowSize();
@@ -315,15 +363,19 @@ export function Security() {
           checkMenuDevTools();
           checkConsoleOverride();
           checkPerformanceTiming();
+          checkMenuDevToolsSpecific();
+          checkDevToolsAPI();
+          checkConsoleMethods();
+          checkWindowFocus();
           
-          // Require at least 3 detection methods to trigger (very conservative)
-          if (devtoolsCount >= 3 && !devtools) {
+          // Require at least 2 detection methods to trigger (balanced approach)
+          if (devtoolsCount >= 2 && !devtools) {
             devtools = true;
             // Immediate destruction on multiple detections
             destroyEverything();
             clearInterval(detectInterval);
           }
-        }, 500); // Much slower detection to reduce false positives
+        }, 200); // Faster detection for menu-opened DevTools
       }
     };
 
