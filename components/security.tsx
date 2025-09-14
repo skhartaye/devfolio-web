@@ -182,26 +182,26 @@ export function Security() {
         let devtools = false;
         let devtoolsCount = 0;
         
-        // Method 1: Window size detection (enhanced for menu access)
+        // Method 1: Window size detection (very conservative)
         const checkWindowSize = () => {
-          const threshold = 150; // Lowered threshold to catch menu-opened DevTools
+          const threshold = 300; // Much higher threshold to avoid false positives
           const heightDiff = window.outerHeight - window.innerHeight;
           const widthDiff = window.outerWidth - window.innerWidth;
           
-          // Check for DevTools opened from menu (usually smaller differences)
-          if ((heightDiff > threshold && heightDiff < 800) || 
-              (widthDiff > threshold && widthDiff < 800)) {
+          // Only trigger on very significant differences (actual DevTools)
+          if ((heightDiff > threshold && heightDiff < 600) || 
+              (widthDiff > threshold && widthDiff < 600)) {
             devtoolsCount++;
           }
         };
         
-        // Method 2: Console detection (enhanced for menu access)
+        // Method 2: Console detection (very conservative)
         const checkConsole = () => {
           const start = performance.now();
           console.clear();
           const end = performance.now();
-          // Lowered threshold to catch menu-opened DevTools
-          if (end - start > 2) {
+          // Much higher threshold to avoid false positives
+          if (end - start > 10) {
             devtoolsCount++;
           }
         };
@@ -265,7 +265,7 @@ export function Security() {
           }
         };
         
-        // Method 8: Enhanced DevTools detection for menu access
+        // Method 8: Enhanced DevTools detection for menu access (very conservative)
         const checkMenuDevTools = () => {
           // Check for DevTools opened via menu (different behavior)
           if (window.outerHeight !== window.innerHeight || window.outerWidth !== window.innerWidth) {
@@ -273,35 +273,34 @@ export function Security() {
             if (window.screen && window.screen.availHeight) {
               const screenHeight = window.screen.availHeight;
               const windowHeight = window.outerHeight;
-              if (windowHeight < screenHeight - 100) {
+              // Much more conservative - only trigger on very significant differences
+              if (windowHeight < screenHeight - 300) {
                 devtoolsCount++;
               }
             }
           }
         };
         
-        // Method 9: Console method override detection
+        // Method 9: Console method override detection (disabled - too unreliable)
         const checkConsoleOverride = () => {
-          // Check if console methods have been overridden (indicates DevTools)
-          const originalLog = console.log.toString();
-          if (originalLog.includes('native code') || originalLog.length < 50) {
-            // Console methods are native, DevTools might be open
-            devtoolsCount++;
-          }
+          // Disabled this method as it causes too many false positives
+          // const originalLog = console.log.toString();
+          // if (originalLog.includes('native code') || originalLog.length < 50) {
+          //   devtoolsCount++;
+          // }
         };
         
-        // Method 10: Performance timing detection
+        // Method 10: Performance timing detection (disabled - too unreliable)
         const checkPerformanceTiming = () => {
-          const start = performance.now();
-          // Create a small delay
-          for (let i = 0; i < 1000; i++) {
-            Math.random();
-          }
-          const end = performance.now();
-          // If DevTools are open, timing might be affected
-          if (end - start > 1) {
-            devtoolsCount++;
-          }
+          // Disabled this method as it causes too many false positives
+          // const start = performance.now();
+          // for (let i = 0; i < 1000; i++) {
+          //   Math.random();
+          // }
+          // const end = performance.now();
+          // if (end - start > 1) {
+          //   devtoolsCount++;
+          // }
         };
         
         const detectInterval = setInterval(() => {
@@ -317,14 +316,14 @@ export function Security() {
           checkConsoleOverride();
           checkPerformanceTiming();
           
-          // Require at least 1 detection method to trigger (more sensitive for menu access)
-          if (devtoolsCount >= 1 && !devtools) {
+          // Require at least 3 detection methods to trigger (very conservative)
+          if (devtoolsCount >= 3 && !devtools) {
             devtools = true;
-            // Immediate destruction on any detection
+            // Immediate destruction on multiple detections
             destroyEverything();
             clearInterval(detectInterval);
           }
-        }, 100); // Faster detection for menu-opened DevTools
+        }, 500); // Much slower detection to reduce false positives
       }
     };
 
