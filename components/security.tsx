@@ -9,7 +9,7 @@ export function Security() {
       e.preventDefault();
       e.stopPropagation();
       
-      // Immediately hide content when right-click is attempted
+      // Only hide content in production mode
       if (process.env.NODE_ENV === 'production') {
         hideAllElements();
       }
@@ -620,65 +620,65 @@ export function Security() {
     document.addEventListener('selectstart', handleSelectStart);
     document.addEventListener('dragstart', handleDragStart);
     
-    // Add zoom prevention event listeners
-    document.addEventListener('keydown', handleZoomPrevention);
-    document.addEventListener('wheel', handleWheelZoom, { passive: false });
-    document.addEventListener('touchstart', handleTouchZoom, { passive: false });
-    document.addEventListener('touchmove', handleTouchZoom, { passive: false });
+    // Add zoom prevention event listeners (only in production)
+    if (process.env.NODE_ENV === 'production') {
+      document.addEventListener('keydown', handleZoomPrevention);
+      document.addEventListener('wheel', handleWheelZoom, { passive: false });
+      document.addEventListener('touchstart', handleTouchZoom, { passive: false });
+      document.addEventListener('touchmove', handleTouchZoom, { passive: false });
+    }
 
     // Additional comprehensive prevention
     window.addEventListener('contextmenu', handleContextMenu);
     document.body.addEventListener('contextmenu', handleContextMenu);
     
-    // Prevent F12 and other DevTools shortcuts more aggressively
-    document.addEventListener('keydown', (e) => {
-      // F12 key
-      if (e.key === 'F12') {
-        e.preventDefault();
-        e.stopPropagation();
-        if (process.env.NODE_ENV === 'production') {
+    // Prevent F12 and other DevTools shortcuts more aggressively (only in production)
+    if (process.env.NODE_ENV === 'production') {
+      document.addEventListener('keydown', (e) => {
+        // F12 key
+        if (e.key === 'F12') {
+          e.preventDefault();
+          e.stopPropagation();
           hideAllElements();
+          return false;
         }
-        return false;
-      }
-      
-      // Ctrl+Shift+I (Inspect Element)
-      if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        e.stopPropagation();
-        if (process.env.NODE_ENV === 'production') {
+        
+        // Ctrl+Shift+I (Inspect Element)
+        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+          e.preventDefault();
+          e.stopPropagation();
           hideAllElements();
+          return false;
         }
-        return false;
-      }
-      
-      // Ctrl+Shift+J (Console)
-      if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-        e.preventDefault();
-        e.stopPropagation();
-        if (process.env.NODE_ENV === 'production') {
+        
+        // Ctrl+Shift+J (Console)
+        if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+          e.preventDefault();
+          e.stopPropagation();
           hideAllElements();
+          return false;
         }
-        return false;
-      }
-      
-      // Ctrl+Shift+C (Element Inspector)
-      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        e.stopPropagation();
-        if (process.env.NODE_ENV === 'production') {
+        
+        // Ctrl+Shift+C (Element Inspector)
+        if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+          e.preventDefault();
+          e.stopPropagation();
           hideAllElements();
+          return false;
         }
-        return false;
-      }
-    });
+      });
+    }
 
-    // Override console and clear it
-    overrideConsole();
-    clearConsole();
+    // Override console and clear it (only in production)
+    if (process.env.NODE_ENV === 'production') {
+      overrideConsole();
+      clearConsole();
+    }
 
-    // Start anti-debugging detection
-    detectDevTools();
+    // Start anti-debugging detection (only in production)
+    if (process.env.NODE_ENV === 'production') {
+      detectDevTools();
+    }
 
     // Clear console every 50ms for better protection (only in production)
     const interval = process.env.NODE_ENV === 'production' 
