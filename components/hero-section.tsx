@@ -31,7 +31,7 @@ export function HeroSection() {
           </h1>
 
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
-            I specialize in Python, Move, C++, PHP, and modern web technologies. I create robust applications 
+            I specialize in Python, Move, C++, PHP, and modern web technologies. I create sustainable and scalable applications 
             with PostgreSQL, Docker, and clean code architecture. Let's build something amazing together.
           </p>
 
@@ -49,7 +49,7 @@ export function HeroSection() {
               <GithubIcon className="h-6 w-6" />
               <span className="sr-only">GitHub</span>
             </a>
-            <a href="https://linkedin.com" className="text-muted-foreground hover:text-primary transition-colors">
+            <a href="https://www.linkedin.com/in/skhart-aye-mercado-b2032b383/" className="text-muted-foreground hover:text-primary transition-colors">
               <LinkedinIcon className="h-6 w-6" />
               <span className="sr-only">LinkedIn</span>
             </a>
