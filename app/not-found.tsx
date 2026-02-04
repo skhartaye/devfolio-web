@@ -21,8 +21,8 @@ export default function NotFound() {
               Go Home
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg" onClick={() => window.history.back()}>
-            <button>
+          <Button asChild variant="outline" size="lg">
+            <button onClick={() => window.history.back()}>
               <ArrowLeftIcon className="h-4 w-4 mr-2" />
               Go Back
             </button>
