@@ -32,7 +32,7 @@ export function ProjectsSection() {
     {
       title: "Aeroband - IoT Air Quality Monitor",
       description:
-        "Real-time air quality monitoring system with mobile app and web dashboard. Winner of IoTCon 2025 1st Runner Up. Built with React,TypeScript,netlify, Neon Postgres, and Move.",
+        "Real-time air quality monitoring system with mobile app and web dashboard. Winner of IoTCon 2025 1st Runner Up. Built with React, TypeScript, Netlify, Neon Postgres, and Move.",
       image: "/iot-air-quality-monitoring-device-dashboard.jpg",
       technologies: ["React", "TypeScript", "Netlify", "Neon Postgres", "Move"],
       github: "https://github.com/skhartaye/aeroband",
@@ -43,7 +43,7 @@ export function ProjectsSection() {
       title: "Smoki - Smart Smoke Detection System",
       description:
         "Advanced vehicle smoke detection system using IoT sensors and machine learning algorithms. Real-time monitoring with instant alerts and automated safety responses.",
-      image: "/task-management-app-interface-kanban-board.jpg",
+      image: "/iot-air-quality-monitoring-device-dashboard.jpg", // Using IoT image since it's similar
       technologies: ["Python", "C++", "PostgreSQL", "Docker", "IoT", "Machine Learning"],
       github: "https://github.com/skhartaye/smoki",
       demo: "https://github.com/skhartaye/smoki",
@@ -53,7 +53,7 @@ export function ProjectsSection() {
       title: "Aerocore - GameFi on Aptos",
       description:
         "A GameFi platform powered by Aptos blockchain. Stake your assets to earn rewards with secure smart contracts built in Move language.",
-      image: "/modern-ecommerce-interface.png",
+      image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg", // Dashboard-style image for crypto/finance
       technologies: ["Aptos", "Move", "React", "TypeScript", "Next.js", "Tailwind CSS"],
       github: "https://github.com/skhartaye/aerocore",
       demo: "https://github.com/skhartaye/aerocore",
@@ -63,7 +63,7 @@ export function ProjectsSection() {
       title: "Fintech Platform",
       description:
         "A comprehensive platform for buying and selling projects in the Philippines. Features secure transactions, project listings, and user management.",
-      image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg",
+      image: "/modern-ecommerce-interface.png", // E-commerce style fits fintech platform
       technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Shadcn UI"],
       github: "https://github.com/skhartaye/fintech",
       demo: "https://github.com/skhartaye/fintech",
