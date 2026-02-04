@@ -15,6 +15,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://skhartaye.dev'),
   title: "Skhart Aye Mercado - Full Stack Developer & IoT Specialist",
   description: "Full-stack developer specializing in Python, Move, C++, PHP, and modern web technologies. IoTCon 2025 1st Runner Up. Building innovative IoT solutions and scalable applications.",
   keywords: ["Full Stack Developer", "IoT Developer", "Python", "Move", "C++", "PHP", "React", "TypeScript", "PostgreSQL", "Docker", "Blockchain", "Aptos"],

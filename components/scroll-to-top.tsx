@@ -34,14 +34,13 @@ export function ScrollToTop() {
   return (
     <>
       {isVisible && (
-        <Button
+        <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
-          size="icon"
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[9999] h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center"
           aria-label="Scroll to top"
         >
           <ChevronUpIcon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
-        </Button>
+        </button>
       )}
     </>
   )
