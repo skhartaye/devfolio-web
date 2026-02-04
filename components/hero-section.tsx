@@ -54,7 +54,7 @@ export function HeroSection() {
               <span className="sr-only">LinkedIn</span>
             </a>
             <a
-              href="mailto:your.email@example.com"
+              href="mailto:mercadoskhartaye@gmail.com"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               <MailIcon className="h-6 w-6" />

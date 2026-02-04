@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -45,27 +46,27 @@ export function ProjectsSection() {
       image: "/task-management-app-interface-kanban-board.jpg",
       technologies: ["Python", "C++", "PostgreSQL", "Docker", "IoT", "Machine Learning"],
       github: "https://github.com/skhartaye/smoki",
-      demo: "https://smoki-demo.com",
+      demo: "https://github.com/skhartaye/smoki",
       featured: true,
     },
     {
-      title: "Aerocore",
+      title: "Aerocore - GameFi on Aptos",
       description:
-        " A Gamefinance powered by Aptos chain. it lets you stake your assets to earn rewards.",
+        "A GameFi platform powered by Aptos blockchain. Stake your assets to earn rewards with secure smart contracts built in Move language.",
       image: "/modern-ecommerce-interface.png",
       technologies: ["Aptos", "Move", "React", "TypeScript", "Next.js", "Tailwind CSS"],
       github: "https://github.com/skhartaye/aerocore",
-      demo: "https://aerocore-demo.com",
+      demo: "https://github.com/skhartaye/aerocore",
       featured: false,
     },
     {
-      title: "Fintech",
+      title: "Fintech Platform",
       description:
-        "Is a platform that allows you to buy and sell projects in the philippines.",
+        "A comprehensive platform for buying and selling projects in the Philippines. Features secure transactions, project listings, and user management.",
       image: "/weather-analytics-dashboard-with-charts-and-graphs.jpg",
       technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Shadcn UI"],
-      github: "https://github.com/skhartaye/weather-dashboard",
-      demo: "https://www.youtube.com/watch?v=Sz5kBviUIdI",
+      github: "https://github.com/skhartaye/fintech",
+      demo: "https://github.com/skhartaye/fintech",
       featured: false,
     },
   ]
@@ -88,13 +89,15 @@ export function ProjectsSection() {
                 className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ring-2 ring-primary/20"
               >
                 <CardHeader className="p-0">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img
+                  <div className="relative overflow-hidden rounded-t-lg h-48">
+                    <Image
                       src={project.image || "/placeholder.svg"}
                       alt={project.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
-                    <Badge className="absolute top-4 left-4 bg-primary">Featured</Badge>
+                    <Badge className="absolute top-4 left-4 bg-primary z-10">Featured</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
@@ -125,6 +128,16 @@ export function ProjectsSection() {
                       </Button>
                     </div>
                   )}
+                  {project.title === "Smoki - Smart Smoke Detection System" && (
+                    <div className="flex gap-3">
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={project.github} target="_blank" rel="noopener noreferrer">
+                          <GithubIcon className="h-4 w-4 mr-2" />
+                          View Project
+                        </a>
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -139,11 +152,13 @@ export function ProjectsSection() {
                 className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
               >
                 <CardHeader className="p-0">
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img
+                  <div className="relative overflow-hidden rounded-t-lg h-40">
+                    <Image
                       src={project.image || "/placeholder.svg"}
                       alt={project.title}
-                      className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 </CardHeader>
@@ -164,7 +179,14 @@ export function ProjectsSection() {
                     )}
                   </div>
 
-                </CardContent>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" asChild className="flex-1">
+                      <a href={project.github} target="_blank" rel="noopener noreferrer">
+                        <GithubIcon className="h-3 w-3 mr-1" />
+                        Code
+                      </a>
+                    </Button>
+                  </div>                </CardContent>
               </Card>
             ))}
           </div>

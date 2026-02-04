@@ -1,108 +1,49 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Enhanced Security and Anti-Debugging Styles */
-* {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-  -webkit-touch-callout: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-user-drag: none !important;
-  -khtml-user-drag: none !important;
-  -moz-user-drag: none !important;
-  -o-user-drag: none !important;
-  user-drag: none !important;
-}
-
-/* Disable text selection globally */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-
-/* Disable drag and drop on all elements */
-* {
-  -webkit-user-drag: none !important;
-  -khtml-user-drag: none !important;
-  -moz-user-drag: none !important;
-  -o-user-drag: none !important;
-  user-drag: none !important;
-}
-
-/* Hide scrollbars completely */
-::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
-}
-
-/* Disable right-click context menu */
-* {
-  -webkit-context-menu: none !important;
-  -moz-context-menu: none !important;
-  -ms-context-menu: none !important;
-  context-menu: none !important;
-}
-
-/* Disable image saving */
+/* Minimal image protection */
 img {
-  -webkit-user-drag: none !important;
-  -khtml-user-drag: none !important;
-  -moz-user-drag: none !important;
-  -o-user-drag: none !important;
-  user-drag: none !important;
-  pointer-events: none !important;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }
 
-/* Disable text highlighting */
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(0.5 0.15 160 / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.5 0.15 160 / 0.5);
+}
+
+/* Accessible focus outlines */
+*:focus-visible {
+  outline: 2px solid oklch(0.5 0.15 160);
+  outline-offset: 2px;
+}
+
+/* Allow text selection with custom styling */
 ::selection {
-  background: transparent !important;
-  color: inherit !important;
+  background: oklch(0.5 0.15 160 / 0.2);
+  color: inherit;
 }
 
 ::-moz-selection {
-  background: transparent !important;
-  color: inherit !important;
-}
-
-/* Disable focus outlines */
-*:focus {
-  outline: none !important;
-}
-
-/* Disable copy/paste */
-input, textarea {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-
-/* Disable zooming */
-html, body {
-  zoom: 1 !important;
-  -webkit-text-size-adjust: 100% !important;
-  -moz-text-size-adjust: 100% !important;
-  -ms-text-size-adjust: 100% !important;
-  text-size-adjust: 100% !important;
-  transform: scale(1) !important;
-  -webkit-transform: scale(1) !important;
-  -moz-transform: scale(1) !important;
-  -ms-transform: scale(1) !important;
-}
-
-/* Disable zoom on all elements */
-* {
-  zoom: 1 !important;
-  transform: scale(1) !important;
-  -webkit-transform: scale(1) !important;
-  -moz-transform: scale(1) !important;
-  -ms-transform: scale(1) !important;
+  background: oklch(0.5 0.15 160 / 0.2);
+  color: inherit;
 }
 
 /* Floating animation for scroll-to-top button */

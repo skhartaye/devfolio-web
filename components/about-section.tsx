@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
@@ -35,6 +36,9 @@ export function AboutSection() {
     "JavaScript",
     "TypeScript",
     "React",
+    "Next.js",
+    "Node.js",
+    "Git",
   ]
 
   return (
@@ -51,11 +55,14 @@ export function AboutSection() {
             <div className="space-y-6">
               <Card>
                 <CardContent className="p-6">
-                  <div className="mx-auto mb-6" style={{ width: '306px', height: '248px' }}>
-                    <img
+                  <div className="mx-auto mb-6 relative" style={{ width: '306px', height: '248px' }}>
+                    <Image
                       src="/skhart.jpg"
-                      alt="Skhart"
-                      className="w-full h-full object-cover"
+                      alt="Skhart Aye Mercado - Full Stack Developer"
+                      fill
+                      className="object-cover rounded-lg"
+                      priority
+                      sizes="306px"
                     />
                   </div>
                 </CardContent>
@@ -75,7 +82,7 @@ export function AboutSection() {
                   and IoT space.
                 </p>
                 <p>
-                  I believe in writing maintainable, well-documented code and creating applications that are both sustainable and user-friendly. My goal is to build solutions that make a real impact.
+                  I believe in writing maintainable, well-documented code and creating applications that are both 
                   performant and user-friendly. My goal is to build solutions that make a real impact.
                 </p>
               </div>

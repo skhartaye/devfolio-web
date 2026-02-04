@@ -51,25 +51,27 @@ export function ContactSection() {
     setSubmitStatus('idle')
 
     try {
-      // Create mailto link with form data
-      const subject = `Contact from ${formData.name} - Portfolio Website`
-      const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      
-      // Encode the mailto URL
-      const mailtoUrl = `mailto:mercadoskhartaye@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-      
-      // Open email client
-      window.open(mailtoUrl, '_blank')
-      
-      // Show success message
-      setSubmitStatus('success')
-      
-      // Reset form after a short delay
-      setTimeout(() => {
-        setFormData({ name: "", email: "", message: "" })
-        setSubmitStatus('idle')
-      }, 3000)
-      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubmitStatus('success')
+        // Reset form after a short delay
+        setTimeout(() => {
+          setFormData({ name: "", email: "", message: "" })
+          setSubmitStatus('idle')
+        }, 5000)
+      } else {
+        console.error('Error response:', data)
+        setSubmitStatus('error')
+      }
     } catch (error) {
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
@@ -172,19 +174,19 @@ export function ContactSection() {
                     disabled={isSubmitting}
                   >
                     <SendIcon className="h-4 w-4 mr-2" />
-                    {isSubmitting ? "Sending..." : "Send to Skhart"}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                   
                   {/* Status Messages */}
                   {submitStatus === 'success' && (
                     <div className="mt-4 p-3 bg-green-100 border border-green-300 rounded-md text-green-800 text-sm">
-                      ✓ Message ready! Your email client should open with the message addressed to Skhart.
+                      ✓ Message sent successfully! I'll get back to you soon.
                     </div>
                   )}
                   
                   {submitStatus === 'error' && (
                     <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-md text-red-800 text-sm">
-                      ✗ Please fill in all fields before sending your message.
+                      ✗ Failed to send message. Please try again or email me directly at mercadoskhartaye@gmail.com
                     </div>
                   )}
                 </form>
@@ -195,7 +197,7 @@ export function ContactSection() {
             <div className="space-y-8">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-2xl">Get in touch</CardTitle>
+                  <CardTitle className="text-2xl">Contact Information</CardTitle>
                   <p className="text-muted-foreground text-pretty">
                     I'm always open to discussing new opportunities, interesting projects, or just having a friendly
                     chat about technology.
