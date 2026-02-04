@@ -43,7 +43,7 @@ export function ProjectsSection() {
       title: "Smoki - Smart Smoke Detection System",
       description:
         "Advanced vehicle smoke detection system using IoT sensors and machine learning algorithms. Real-time monitoring with instant alerts and automated safety responses.",
-      image: "/iot-air-quality-monitoring-device-dashboard.jpg", // Using IoT image since it's similar
+      image: "/task-management-app-interface-kanban-board.jpg",
       technologies: ["Python", "C++", "PostgreSQL", "Docker", "IoT", "Machine Learning"],
       github: "https://github.com/skhartaye/smoki",
       demo: "https://github.com/skhartaye/smoki",
